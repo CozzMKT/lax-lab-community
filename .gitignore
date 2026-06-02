@@ -1,0 +1,23 @@
+node_modules
+.next
+out
+.DS_Store
+*.tgz
+npm-debug.log*
+
+# env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# vercel
+.vercel
+
+# All media files — served from CDN/Mux, not stored in git
+public/
+Drill\ Covers/
+Drill\ Videos/
+JULESIMG*.png
+JULESIMG*.jpg
