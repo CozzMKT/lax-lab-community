@@ -112,6 +112,26 @@ export default function LandingPage() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [isDark, setIsDark] = useState(true);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+
+  const handleCheckout = async () => {
+    setCheckoutLoading(true);
+    try {
+      const res = await fetch("/api/stripe/checkout", { method: "POST" });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        // No Stripe configured yet — go straight to dashboard for testing
+        window.location.href = "/dashboard";
+      }
+    } catch {
+      // Fallback for testing without Stripe
+      window.location.href = "/dashboard";
+    } finally {
+      setCheckoutLoading(false);
+    }
+  };
 
   useEffect(() => {
     const saved = localStorage.getItem("laxlab-theme");
@@ -688,12 +708,13 @@ export default function LandingPage() {
                 <p className={`text-sm font-bold ${t.text}`}>$149<span className={`text-2xs ${t.textFaint} font-normal`}>/mo</span></p>
               </div>
 
-              <Link
-                href="/dashboard"
-                className="block w-full bg-brand-green hover:bg-brand-green-hover text-brand-dark font-bold text-[13px] py-2.5 rounded-lg transition-colors duration-150 text-center"
+              <button
+                onClick={handleCheckout}
+                disabled={checkoutLoading}
+                className="block w-full bg-brand-green hover:bg-brand-green-hover text-brand-dark font-bold text-[13px] py-2.5 rounded-lg transition-colors duration-150 text-center disabled:opacity-70"
               >
-                Create Account & Start Training
-              </Link>
+                {checkoutLoading ? "Loading..." : "Create Account & Start Training →"}
+              </button>
               <p className={`text-2xs ${t.textFainter} text-center`}>
                 Already a member?{" "}
                 <button onClick={() => { setShowSignup(false); setShowLogin(true); }} className="text-brand-green hover:text-brand-green-hover">

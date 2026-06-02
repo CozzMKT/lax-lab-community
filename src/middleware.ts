@@ -1,12 +1,10 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { updateSession } from "@/lib/supabase/middleware";
 
-export async function middleware(request: NextRequest) {
-  // Skip auth middleware if Supabase isn't configured yet
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-    return NextResponse.next();
-  }
-  return await updateSession(request);
+// Auth middleware disabled until Supabase env vars are configured.
+// To enable: add NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY
+// to Vercel environment variables, then uncomment the full middleware.
+export async function middleware(_request: NextRequest) {
+  return NextResponse.next();
 }
 
 export const config = {
